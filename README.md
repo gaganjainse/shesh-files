@@ -1,5 +1,12 @@
-# 📁 shesha-files
+# shesha-files
 
+**real-time AI file organizer** — Rust notify watcher + Python classifier with undo log.
+
+- Layer: Soma (Soma)
+- License: GPL-3.0
+- Part of: [Shesha ecosystem](https://github.com/gaganjainse/shesha-ecosystem)
+
+---
 **Shesha Soma — file organizer.** A tiny Rust inotify watcher pipes file-create events
 (JSON) to a Python classifier (deterministic rules first, local LLM only for unknowns)
 and a safe apply layer that never deletes user data.

@@ -23,7 +23,9 @@ struct FileEvent {
 }
 
 fn home() -> PathBuf {
-    std::env::var("HOME").map(PathBuf::from).unwrap_or_else(|_| PathBuf::from("/root"))
+    std::env::var("HOME")
+        .map(PathBuf::from)
+        .unwrap_or_else(|_| PathBuf::from("/root"))
 }
 
 fn watch_dirs() -> Vec<PathBuf> {

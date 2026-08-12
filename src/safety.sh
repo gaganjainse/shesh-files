@@ -158,7 +158,12 @@ create_backup() {
 
     mkdir -p "$backup_dir"
     if [[ -d "$target" ]]; then
-        cp -r "$target"/* "$backup_dir/" 2>/dev/null || true
+        local copy_err
+        if copy_err=$(cp -r "$target"/* "$backup_dir/" 2>&1); then
+            : # full copy succeeded
+        else
+            log_error "Backup INCOMPLETE for $target (continuing with what copied): $copy_err"
+        fi
     elif [[ -f "$target" ]]; then
         cp "$target" "$backup_dir/"
     fi

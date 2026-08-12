@@ -16,6 +16,7 @@ import os
 import pathlib
 import re
 import sys
+import traceback
 import urllib.request
 
 HOME = pathlib.Path(os.path.expanduser("~"))
@@ -67,12 +68,10 @@ NAME_PATTERNS: list[tuple[re.Pattern, str]] = [
 
 
 def decide(path: str) -> dict:
+    # pathlib ops are pure (no I/O): .name/.suffixes cannot fail. Anything
+    # invalid in `path` raises at Path() construction — loudly, which is correct.
     p = pathlib.Path(path)
-    try:
-        name = p.name
-    except Exception:
-        return {"src": path, "dest": str(HOME / "Documents/Inbox"),
-                "method": "error", "conf": 0.0}
+    name = p.name
 
     # 1. name patterns
     for rx, dest in NAME_PATTERNS:
@@ -134,7 +133,9 @@ def _llm(p: pathlib.Path, mime: str | None) -> dict | None:
         dest = str(HOME / data["dest"])
         return {"src": str(p), "dest": dest, "method": "llm",
                 "conf": float(data.get("conf", 0.4))}
-    except Exception as e:  # offline / busy -> deterministic fallback
+    except (OSError, ValueError, KeyError) as e:  # offline/malformed -> deterministic fallback
+        # URLError/TimeoutError are OSErrors; bad JSON and missing keys are
+        # ValueError/KeyError. The fallback is announced on stderr, never silent.
         print(f"# llm unavailable: {e}", file=sys.stderr)
         return None
 
@@ -150,8 +151,12 @@ def main() -> int:
             if not path:
                 continue
             print(json.dumps(decide(path)), flush=True)
-        except Exception as e:  # never die on one bad event
-            print(json.dumps({"error": str(e)}), file=sys.stderr, flush=True)
+        except Exception as e:  # noqa: BLE001
+            # Daemon boundary: one malformed event must not kill the stream
+            # processor. Loud, not silent: full traceback goes to stderr.
+            print(json.dumps({"error": f"{type(e).__name__}: {e}",
+                              "traceback": traceback.format_exc(limit=5)}),
+                  file=sys.stderr, flush=True)
     return 0
 
 

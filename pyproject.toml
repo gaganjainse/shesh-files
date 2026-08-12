@@ -1,7 +1,7 @@
 [project]
-name = "shesha-files"
+name = "shesh-files"
 version = "0.2.0"
-description = "Shesha Soma: real-time, AI-assisted file organizer (watcher + classifier)"
+description = "Shesh Soma: real-time, AI-assisted file organizer (watcher + classifier)"
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "GPL-3.0-or-later" }

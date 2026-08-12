@@ -1,0 +1,9 @@
+README.md
+pyproject.toml
+src/classifier.py
+src/shesha_files.egg-info/PKG-INFO
+src/shesha_files.egg-info/SOURCES.txt
+src/shesha_files.egg-info/dependency_links.txt
+src/shesha_files.egg-info/requires.txt
+src/shesha_files.egg-info/top_level.txt
+tests/test_classifier.py

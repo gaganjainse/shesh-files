@@ -1,4 +1,4 @@
-"""Offline tests for the shesha-files deterministic classifier."""
+"""Offline tests for the shesh-files deterministic classifier."""
 from __future__ import annotations
 
 import importlib.util
@@ -18,7 +18,7 @@ def load():
 
 @pytest.fixture(autouse=True)
 def no_llm(monkeypatch, tmp_path):
-    monkeypatch.setenv("SHESHA_NO_LLM", "1")
+    monkeypatch.setenv("SHESH_NO_LLM", "1")
     monkeypatch.setattr(load(), "HOME", tmp_path, raising=False)
 
 

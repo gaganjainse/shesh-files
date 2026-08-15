@@ -1,48 +1,35 @@
->  **Consolidated into [shesh-core](https://github.com/gaganjainse/shesh-core)** — this module now lives in the shesh-core monorepo (same package name, same console script). Archived 2026-08-13.
-
 # shesh-files
 
-**real-time AI file organizer** — Rust notify watcher + Python classifier with undo log.
+> **Superseded by [shesh-core](https://github.com/gaganjainse/shesh-core).**
+> This repository is a tombstone: its history is preserved, its source is not.
 
-- Layer: Soma (Soma)
-- License: GPL-3.0
-- Part of: [Shesh ecosystem](https://github.com/gaganjainse/shesh-ecosystem)
+## What happened
 
----
-**Shesh Soma — file organizer.** A tiny Rust inotify watcher pipes file-create events
-(JSON) to a Python classifier (deterministic rules first, local LLM only for unknowns)
-and a safe apply layer that never deletes user data.
+[ADR-0019](https://github.com/gaganjainse/shesh-docs/blob/main/src/governance/adr/0019-shesh-core-monorepo.md)
+consolidated the single-module services into one repository. A module of a few
+hundred lines is not a service: each one carried its own build configuration,
+pipeline, and security policy, and those drifted apart from each other.
 
-- License: GPL-3.0
-- Layer: Soma
-- Provides: `file-organizer`, `inotify-watcher`, `undo-log`
-- Part of: [Shesh ecosystem](https://github.com/gaganjainse/shesh-ecosystem)
+The code now lives in `shesh-core` as the `shesh_files` package, with
+the same import path and the same console script.
 
-## Layout
+## Why the source was removed
 
-```
-watcher-rs/   # Rust binary `sm-watcher` (notify, debounced JSON output)
-src/          # classifier.py (stdin JSON -> decision JSON)
-tests/        # offline pytest (no model/network)
-```
+Two copies of the same module drift. Keeping the code here meant a reader could
+find it, edit it, and have the change silently ignored by everything that
+actually runs.
 
-## Develop
+The history remains in this repository's git log. Nothing was lost.
+
+## Installing
 
 ```bash
-uv sync --extra dev
-uv run pytest -q
-uv run ruff check .
-(cd watcher-rs && cargo fmt --check && cargo clippy -D warnings && cargo test)
+pipx install git+https://github.com/gaganjainse/shesh-core.git
 ```
 
-## Runtime
+Console script names are unchanged, so existing client configuration keeps
+working.
 
-```bash
-sm-watcher | python -m classifier | shesh-files-apply   # apply layer lives in shesh-desktop
-```
-Designed to run on an RTX 4050 / 6 GB laptop; the LLM is optional (`SHESH_NO_LLM=1`).
+## Licence
 
-## Security
-
-Security posture and vulnerability reporting: [canonical ecosystem security
-policy](https://github.com/gaganjainse/shesh-ecosystem/blob/main/SECURITY.md).
+GPL-3.0-or-later.

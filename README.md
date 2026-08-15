@@ -1,4 +1,4 @@
-> ⚠️ **Consolidated into [shesh-core](https://github.com/gaganjainse/shesh-core)** — this module now lives in the shesh-core monorepo (same package name, same console script). Archived 2026-08-13.
+>  **Consolidated into [shesh-core](https://github.com/gaganjainse/shesh-core)** — this module now lives in the shesh-core monorepo (same package name, same console script). Archived 2026-08-13.
 
 # shesh-files
 
@@ -40,7 +40,6 @@ uv run ruff check .
 ```bash
 sm-watcher | python -m classifier | shesh-files-apply   # apply layer lives in shesh-desktop
 ```
-
 Designed to run on an RTX 4050 / 6 GB laptop; the LLM is optional (`SHESH_NO_LLM=1`).
 
 ## Security
